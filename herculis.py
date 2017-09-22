@@ -116,13 +116,12 @@ def lambda_handler(event, context):
         if row[0] > timez:
             powerTime = datetime.datetime.strptime(row[0], '%H:%M:%S')
             powerTime = datetime.datetime.strftime(powerTime, '%H:%M')
-            powerOut = row[7]
-            consumption = row[18]
-            batteryTemp = row[11]
-            voltage1 = float(row[1])
-            voltage2 = float(row[4])
+            powerGen = float(row[11])*1000
+            energyGen = float(row[1])*1000
+            invertTemp = row[3]
+            voltage1 = float(row[4])
+            voltage2 = float(row[6])
             vdc = (voltage1 + voltage2)/2
-            data = date + "," + str(powerTime) + "," + str(powerOut) + ",," + str(consumption) + ",," + str(batteryTemp) +',;'
-            print "Time: " + data + " " + str(powerTime) + " KW: " + str(powerOut) + " e-day: " + str(consumption) + " temp: " + str(batteryTemp) + " vdc: " + str(vdc)
-            pvoutz.add_status(date, powerTime, power_exp=powerOut, power_imp=consumption, temp=batteryTemp, vdc=str(vdc))
+            print "Time: " + str(powerTime) + " W: " + str(powerGen) + " Wh: " + str(energyGen) + " temp: " + str(invertTemp) + " vdc: " + str(vdc)
+            pvoutz.add_status(date, powerTime, power_exp=powerGen, energy_exp=energyGen, temp=invertTemp, vdc=str(vdc))
             time.sleep(apiDelay)
