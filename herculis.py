@@ -14,6 +14,7 @@ pvo_host= "pvoutput.org"
 pvo_key = os.environ['pvo_key']
 pvo_systemid = os.environ['pvo_systemid']
 pvo_statusInterval = 5
+tzOffset = float(os.environ['tzOffset'])
 
 sgDeviceId = os.environ['sgDeviceId']
 apiDelay = 1 # time to delay after API calls
@@ -98,7 +99,7 @@ def getSungrowData(start=time.strftime("%Y%m%d")):
     return cr
     
 def lambda_handler(event, context):
-    now = datetime.datetime.now() + datetime.timedelta(hours=8)
+    now = datetime.datetime.now() + datetime.timedelta(hours=tzOffset)
     pvoutz = Connection(pvo_key, pvo_systemid, pvo_host)
     PVOStatus = pvoutz.get_status()
     date = PVOStatus.split(",")[0]
